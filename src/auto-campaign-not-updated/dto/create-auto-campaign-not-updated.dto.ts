@@ -1,4 +1,4 @@
-import { IsDateString, IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 
 export class CreateAutoCampaignNotUpdatedDto {
     @IsNotEmpty()
@@ -12,10 +12,6 @@ export class CreateAutoCampaignNotUpdatedDto {
     @IsNotEmpty()
     @IsString()
     campaign_name: string;
-
-    
-    @IsDateString()
-    created: string;
 
     @IsNotEmpty()
     @IsString()
