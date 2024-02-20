@@ -10,6 +10,7 @@ import { CreateAutoCampaignNotUpdatedDto } from '../dto/create-auto-campaign-not
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateAutoCampaignNotUpdatedDto } from '../dto/update-auto-campaign-not-updated.dto';
 import { ValidationError } from 'class-validator';
+import { Logger } from '@nestjs/common';
 
 @Injectable()
 export class AutoCampaignNotUpdatedRepository {
@@ -17,6 +18,8 @@ export class AutoCampaignNotUpdatedRepository {
     @InjectRepository(AutoCampaignNotUpdated)
     private readonly autoCampaignNotUpdatedRepository: Repository<AutoCampaignNotUpdated>,
   ) {}
+
+  private logger = new Logger('AutoCampaignNotUpdatedRepository')
 
   async createCampaign(
     createAutoCampaignNotUpdatedDto: CreateAutoCampaignNotUpdatedDto,
@@ -42,14 +45,14 @@ export class AutoCampaignNotUpdatedRepository {
         error.every((err) => err instanceof ValidationError)
       ) {
         // Here you can handle validation errors
-        console.error('Validation errors:', error);
+        this.logger.error('Validation errors:', error);
         throw new BadRequestException(
           'Validation errors',
           JSON.stringify(error),
         );
       } else {
         // Other types of errors
-        console.error('An unexpected error occurred:', error);
+        this.logger.error('An unexpected error occurred:', error);
         throw new InternalServerErrorException(
           'An unexpected error occurred',
           JSON.stringify(error),
@@ -83,7 +86,7 @@ export class AutoCampaignNotUpdatedRepository {
         throw error;
       } else {
         // For other types of errors, handle them and throw a generic error
-        console.error('An unexpected error occurred:', error);
+        this.logger.error('An unexpected error occurred:', error);
         throw new InternalServerErrorException('An unexpected error occurred');
       }
     }
@@ -120,7 +123,7 @@ export class AutoCampaignNotUpdatedRepository {
       );
     } catch (error) {
       // Catch any error that occurs during the process
-      console.error('An unexpected error occurred:', error);
+      this.logger.error('An unexpected error occurred:', error);
       throw new InternalServerErrorException('An unexpected error occurred');
     }
   }
@@ -141,7 +144,7 @@ export class AutoCampaignNotUpdatedRepository {
         throw error;
       } else {
         // For other types of errors, handle them and throw a generic error
-        console.error('An unexpected error occurred:', error);
+        this.logger.error('An unexpected error occurred:', error);
         throw new InternalServerErrorException('An unexpected error occurred');
       }
     }
