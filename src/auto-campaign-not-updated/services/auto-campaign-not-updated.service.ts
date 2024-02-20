@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAutoCampaignNotUpdatedDto } from '../dto/create-auto-campaign-not-updated.dto';
 import { UpdateAutoCampaignNotUpdatedDto } from '../dto/update-auto-campaign-not-updated.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -45,20 +45,13 @@ export class AutoCampaignNotUpdatedService {
 
   async update(
     id: number,
-    updateAutoCampaignNotUpdatedDto: UpdateAutoCampaignNotUpdatedDto
+    updateAutoCampaignNotUpdatedDto: UpdateAutoCampaignNotUpdatedDto,
   ): Promise<AutoCampaignNotUpdated> {
-    const {
-      api_client_name,
-      api_campaign_id,
-      campaign_name,
-      created_by,
-    } = updateAutoCampaignNotUpdatedDto;
+    const { api_client_name, api_campaign_id, campaign_name, created_by } =
+      updateAutoCampaignNotUpdatedDto;
 
-    // Encuentra la campaña a actualizar
-    const autoCampaignNotUpdated = await this.findOne(id)
-   
+    const autoCampaignNotUpdated = await this.findOne(id);
 
-    // Actualiza los campos necesarios
     if (api_client_name !== undefined) {
       autoCampaignNotUpdated.api_client_name = api_client_name;
     }
@@ -72,12 +65,14 @@ export class AutoCampaignNotUpdatedService {
       autoCampaignNotUpdated.created_by = created_by;
     }
 
-  
-    return this.autoCampaignNotUpdatedRepository.save(autoCampaignNotUpdated)
-}
+    return this.autoCampaignNotUpdatedRepository.save(autoCampaignNotUpdated);
+  }
 
+  async remove(id: number): Promise<void> {
+    const result = await this.autoCampaignNotUpdatedRepository.delete(id);
 
-  remove(id: number) {
-    return `This action removes a #${id} autoCampaignNotUpdated`;
+    if (result.affected === 0) {
+      throw new NotFoundException(`Task with ID "${id}" not found`);
+    }
   }
 }
