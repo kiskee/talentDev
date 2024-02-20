@@ -3,10 +3,11 @@ import { AutoCampaignNotUpdatedService } from './services/auto-campaign-not-upda
 import { AutoCampaignNotUpdatedController } from './controllers/auto-campaign-not-updated.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AutoCampaignNotUpdated } from './entities/auto-campaign-not-updated.entity';
+import { AutoCampaignNotUpdatedRepository } from './repositories/auto-campaign-not-updated.repository';
 
 @Module({
   controllers: [AutoCampaignNotUpdatedController],
-  providers: [AutoCampaignNotUpdatedService],
+  providers: [AutoCampaignNotUpdatedService,AutoCampaignNotUpdatedRepository],
   imports: [
     TypeOrmModule.forFeature([AutoCampaignNotUpdated])
   ]

@@ -1,78 +1,35 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateAutoCampaignNotUpdatedDto } from '../dto/create-auto-campaign-not-updated.dto';
 import { UpdateAutoCampaignNotUpdatedDto } from '../dto/update-auto-campaign-not-updated.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { AutoCampaignNotUpdated } from '../entities/auto-campaign-not-updated.entity';
+import { AutoCampaignNotUpdatedRepository } from '../repositories/auto-campaign-not-updated.repository';
 
 @Injectable()
 export class AutoCampaignNotUpdatedService {
-  constructor(
-    @InjectRepository(AutoCampaignNotUpdated)
-    private readonly autoCampaignNotUpdatedRepository: Repository<AutoCampaignNotUpdated>,
-  ) {}
+  constructor(private readonly repo: AutoCampaignNotUpdatedRepository) {}
 
   async create(
     createAutoCampaignNotUpdatedDto: CreateAutoCampaignNotUpdatedDto,
   ): Promise<AutoCampaignNotUpdated> {
-    const {
-      api_client_name,
-      api_campaign_id,
-      campaign_name,
-      created,
-      created_by,
-    } = createAutoCampaignNotUpdatedDto;
-
-    const auNotUp = this.autoCampaignNotUpdatedRepository.create({
-      api_client_name,
-      api_campaign_id,
-      campaign_name,
-      created,
-      created_by,
-    });
-
-    await this.autoCampaignNotUpdatedRepository.save(auNotUp);
-    return auNotUp;
+    return await this.repo.createCampaign(createAutoCampaignNotUpdatedDto);
   }
 
   findAll() {
-    return this.autoCampaignNotUpdatedRepository.find({});
+    return this.repo.findAll();
   }
 
   findOne(id: number) {
-    return this.autoCampaignNotUpdatedRepository.findOneBy({ id: id });
+    return this.repo.findOne(id);
   }
 
   async update(
     id: number,
     updateAutoCampaignNotUpdatedDto: UpdateAutoCampaignNotUpdatedDto,
   ): Promise<AutoCampaignNotUpdated> {
-    const { api_client_name, api_campaign_id, campaign_name, created_by } =
-      updateAutoCampaignNotUpdatedDto;
-
-    const autoCampaignNotUpdated = await this.findOne(id);
-
-    if (api_client_name !== undefined) {
-      autoCampaignNotUpdated.api_client_name = api_client_name;
-    }
-    if (api_campaign_id !== undefined) {
-      autoCampaignNotUpdated.api_campaign_id = api_campaign_id;
-    }
-    if (campaign_name !== undefined) {
-      autoCampaignNotUpdated.campaign_name = campaign_name;
-    }
-    if (created_by !== undefined) {
-      autoCampaignNotUpdated.created_by = created_by;
-    }
-
-    return this.autoCampaignNotUpdatedRepository.save(autoCampaignNotUpdated);
+    return this.repo.update(id, updateAutoCampaignNotUpdatedDto);
   }
 
   async remove(id: number): Promise<void> {
-    const result = await this.autoCampaignNotUpdatedRepository.delete(id);
-
-    if (result.affected === 0) {
-      throw new NotFoundException(`Task with ID "${id}" not found`);
-    }
+    return this.repo.remove(id);
   }
 }

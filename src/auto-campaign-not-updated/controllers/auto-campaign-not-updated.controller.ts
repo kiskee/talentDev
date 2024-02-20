@@ -1,15 +1,29 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { AutoCampaignNotUpdatedService } from '../services/auto-campaign-not-updated.service';
 import { CreateAutoCampaignNotUpdatedDto } from '../dto/create-auto-campaign-not-updated.dto';
 import { UpdateAutoCampaignNotUpdatedDto } from '../dto/update-auto-campaign-not-updated.dto';
 
 @Controller('auto-campaign-not-updated')
 export class AutoCampaignNotUpdatedController {
-  constructor(private readonly autoCampaignNotUpdatedService: AutoCampaignNotUpdatedService) {}
+  constructor(
+    private readonly autoCampaignNotUpdatedService: AutoCampaignNotUpdatedService,
+  ) {}
 
   @Post()
-  create(@Body() createAutoCampaignNotUpdatedDto: CreateAutoCampaignNotUpdatedDto) {
-    return this.autoCampaignNotUpdatedService.create(createAutoCampaignNotUpdatedDto);
+  create(
+    @Body() createAutoCampaignNotUpdatedDto: CreateAutoCampaignNotUpdatedDto,
+  ) {
+    return this.autoCampaignNotUpdatedService.create(
+      createAutoCampaignNotUpdatedDto,
+    );
   }
 
   @Get()
@@ -23,8 +37,14 @@ export class AutoCampaignNotUpdatedController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAutoCampaignNotUpdatedDto: UpdateAutoCampaignNotUpdatedDto) {
-    return this.autoCampaignNotUpdatedService.update(+id, updateAutoCampaignNotUpdatedDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateAutoCampaignNotUpdatedDto: UpdateAutoCampaignNotUpdatedDto,
+  ) {
+    return this.autoCampaignNotUpdatedService.update(
+      +id,
+      updateAutoCampaignNotUpdatedDto,
+    );
   }
 
   @Delete(':id')
